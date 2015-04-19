@@ -1,0 +1,48 @@
+#!/bin/bash
+# Programa desenvolvido por _MORFREE_ #itapirados [brasnet]  17/03/01
+# V=0.7
+# este programa killa o ultimo processo rodado ou colocado em bg
+# para interroper use CTRL + C
+#           ******* tome cuidado *********
+trap "sair " SIGINT
+#trap "sair " SIGTSTP   # nao funfa direito
+ps -A > .bg.processes-run
+cat .bg.processes-run | grep -B 1 -w "kill-9-last.bg" | head -n1 >  .bg.qualprog
+cat .bg.qualprog | cut -d" " -f1 > .bg.kill-fi
+cat .bg.qualprog | cut -d" " -f2 >> .bg.kill-fi
+cat .bg.qualprog | cut -d" " -f3 >> .bg.kill-fi
+cat .bg.qualprog | cut -d" " -f4 >> .bg.kill-fi
+cat .bg.qualprog | cut -d" " -f5 >> .bg.kill-fi
+function sair ( ) {
+if [ `ls .bg.* | wc -l` = 3 ];then
+rm -f .bg.*
+else
+   :
+fi
+exit 0
+}
+function limpar ( ) {
+kill -9 `cat .bg.kill-fi` 2>/dev/null
+if [ `ls .bg.* | wc -l` = 3 ];then
+rm -f .bg.*
+else
+   :
+fi
+}
+function die ( ) {
+echo "Vc tem 4 segundos para interromper:"
+echo "kill -9 `head -n1 .bg.qualprog`"
+}
+function conta ( ) {
+var0=0
+while [ "$var0" -lt 5 ]
+do
+echo -n "$var0 "
+var0=`expr $var0 + 1`
+sleep 1 s
+done
+echo
+}
+die
+conta
+limpar

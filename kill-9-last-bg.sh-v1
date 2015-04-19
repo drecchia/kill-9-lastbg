@@ -1,0 +1,16 @@
+#!/bin/sh
+# bla..bla.. sux for the mass... dont read this or you will see a big ass
+# ALASKA - do the world better.. do it by your self...
+rm -f /tmp/.bg
+trap 'rm -f /tmp/.bg;echo;exit' 1 2 3 19 20
+ps -A | tail -n5 | head -n1 > /tmp/.bg
+pN=`cat /tmp/.bg|cut -d':' -f3|cut -d' ' -f2`
+pID=`cat /tmp/.bg|cut -c1-6|sed s/' '/''/g|grep -v 'PID'`
+echo  -n "
+       O seguinte programa foi detectado : $pN 
+                                     PID : $pID 
+
+echo 'Pressione qualquer tecla ou Ctrl + C'
+pauseme 1> /dev/null
+kill -9 $pID &> /dev/null || killall -9 $pN &> /dev/null || echo 'Incapaz de Matar o Processo!';echo
+rm -f /tmp/.bg
